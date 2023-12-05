@@ -4,6 +4,14 @@ import streamlit as st
 import Methodes
 
 
+#Ressources drive
+departement_transaction_url="https://drive.google.com/file/d/1wbQ8urZTfpFUO5cyujnzpQBko49xBxjg"
+departement_transactionAnnee_url="https://drive.google.com/file/d/1H3Z4BsYRbKesVRWiix2htB802qIx-g2r"
+region_transactionAnnee_url="https://drive.google.com/file/d/1dG_qbJX2Wzo8I6vYEIMTwszDr9JTerXP"
+moyenne_region_url="https://drive.google.com/file/d/1iZSQeb_QPzsSywSyGLQsBrCv5wmbQ-Ex"
+region_transactionTest_url="https://drive.google.com/file/d/1J5bGiIAJn5jX6qULnS4d2ZWKcLtXFTRx"
+
+
 #Les couleurs
 color = 'lightblue'
 color_map_inondation = "ice"
@@ -13,12 +21,15 @@ palette="Viridis"
 color_type_local=["coral","cornflowerblue"]
 
 #import des bases
-departement_transaction = pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/departement_transaction.csv")
-departement_transactionAnnee = pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/departement_transactionAnnee.csv")
-region_transactionAnnee = pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/region_transactionAnnee.csv")
-region_transactionTest= pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/region_transactionTest.csv")
-moyenne_region= pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/moyenne_region.csv")
-dvf= pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/dvf.csv")
+departement_transaction = pd.read_csv('https://drive.google.com/uc?id='+departement_transaction_url.split('/')[-1])
+departement_transactionAnnee = pd.read_csv('https://drive.google.com/uc?id='+departement_transactionAnnee_url.split('/')[-1])
+region_transactionAnnee = pd.read_csv('https://drive.google.com/uc?id='+region_transactionAnnee_url.split('/')[-1])
+region_transactionTest= pd.read_csv('https://drive.google.com/uc?id='+region_transactionTest_url.split('/')[-1])
+moyenne_region= pd.read_csv('https://drive.google.com/uc?id='+moyenne_region_url.split('/')[-1])
+
+#dvf= pd.read_csv(r"resources/dvf.csv")
+
+
 #1er graphe dans valeurs foncières
 fig= px.bar(departement_transaction, x= "Département",y= "Nombre",title= "Nombre de ventes par département")
 

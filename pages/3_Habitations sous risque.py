@@ -10,23 +10,23 @@ from streamlit_folium import st_folium
 ## Adding tabs and columns, and filters
 #tab1, tab2 = st.tabs(["Évènements sécheresse","Évènements inondation"])
 col1,col2 = st.columns(2)
-data_NA = CAT_NAT.data_sec.dropna(subset=['Latitude'])
-data_NA = data_NA.dropna(subset=['Longitude'])
-data_NA_inond=CAT_NAT.data_inond.dropna(subset=['Latitude'])
-data_NA_inond=data_NA_inond.dropna(subset=['Longitude'])
+#data_NA = CAT_NAT.data_sec.dropna(subset=['Latitude'])
+#data_NA = data_NA.dropna(subset=['Longitude'])
+#data_NA_inond=CAT_NAT.data_inond.dropna(subset=['Latitude'])
+#data_NA_inond=data_NA_inond.dropna(subset=['Longitude'])
 
 
 
 
-filtered_data = Methodes.filter_dataframe(data_NA, 1)
-st.map(filtered_data, latitude='Latitude', longitude='Longitude')
+#filtered_data = Methodes.filter_dataframe(data_NA, 1)
+#st.map(filtered_data, latitude='Latitude', longitude='Longitude')
 
-filtered_data2 = Methodes.filter_dataframe(data_NA_inond, 2)
-st.map(filtered_data2, latitude='Latitude', longitude='Longitude')
+#filtered_data2 = Methodes.filter_dataframe(data_NA_inond, 2)
+#st.map(filtered_data2, latitude='Latitude', longitude='Longitude')
 
 # Create a Folium map centered around France
-france_map = folium.Map(location=[46.6031, 1.7001], zoom_start=6)
-st_data = st_folium(france_map, width=725)
+#france_map = folium.Map(location=[46.6031, 1.7001], zoom_start=6)
+#st_data = st_folium(france_map, width=725)
 
 #def tab_secheresse():
 #    st.header("Pour les évènements sécheresse")
@@ -73,6 +73,6 @@ def create_tabs(df1: pd.DataFrame, df2: pd.DataFrame):
                         filtered_data2 = Methodes.filter_dataframe(df2, 2)
                         st.map(filtered_data2, latitude='Latitude', longitude='Longitude')
 
-create_tabs(data_NA,data_NA_inond)
+#create_tabs(data_NA,data_NA_inond)
 
 

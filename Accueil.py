@@ -8,7 +8,7 @@ import datetime
 
 #Adding logo
 #st.set_page_config(layout="wide")
-image = Image.open('C:/documents A5_2023-2024/DataVizChallenge/logo.jpg')
+image = Image.open('resources/logo.jpg')
 col1,col2 = st.columns([0.05,0.95])
 
 #Insertion de notre logo
