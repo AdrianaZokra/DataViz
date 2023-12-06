@@ -5,11 +5,11 @@ import Methodes
 
 
 #Ressources drive
-departement_transaction_url="https://drive.google.com/file/d/1wbQ8urZTfpFUO5cyujnzpQBko49xBxjg"
-departement_transactionAnnee_url="https://drive.google.com/file/d/1H3Z4BsYRbKesVRWiix2htB802qIx-g2r"
-region_transactionAnnee_url="https://drive.google.com/file/d/1dG_qbJX2Wzo8I6vYEIMTwszDr9JTerXP"
-moyenne_region_url="https://drive.google.com/file/d/1iZSQeb_QPzsSywSyGLQsBrCv5wmbQ-Ex"
-region_transactionTest_url="https://drive.google.com/file/d/1J5bGiIAJn5jX6qULnS4d2ZWKcLtXFTRx"
+departement_transaction_url="https://drive.google.com/uc?id=1wbQ8urZTfpFUO5cyujnzpQBko49xBxjg"
+departement_transactionAnnee_url="https://drive.google.com/uc?id=1H3Z4BsYRbKesVRWiix2htB802qIx-g2r"
+region_transactionAnnee_url="https://drive.google.com/uc?id=1dG_qbJX2Wzo8I6vYEIMTwszDr9JTerXP"
+moyenne_region_url="https://drive.google.com/uc?id=1iZSQeb_QPzsSywSyGLQsBrCv5wmbQ-Ex"
+region_transactionTest_url="https://drive.google.com/uc?id=1J5bGiIAJn5jX6qULnS4d2ZWKcLtXFTRx"
 
 
 #Les couleurs
@@ -21,11 +21,11 @@ palette="Viridis"
 color_type_local=["coral","cornflowerblue"]
 
 #import des bases
-departement_transaction = pd.read_csv('https://drive.google.com/uc?id='+departement_transaction_url.split('/')[-1])
-departement_transactionAnnee = pd.read_csv('https://drive.google.com/uc?id='+departement_transactionAnnee_url.split('/')[-1])
-region_transactionAnnee = pd.read_csv('https://drive.google.com/uc?id='+region_transactionAnnee_url.split('/')[-1])
-region_transactionTest= pd.read_csv('https://drive.google.com/uc?id='+region_transactionTest_url.split('/')[-1])
-moyenne_region= pd.read_csv('https://drive.google.com/uc?id='+moyenne_region_url.split('/')[-1])
+departement_transaction = pd.read_csv(departement_transaction_url)
+departement_transactionAnnee = pd.read_csv(departement_transactionAnnee_url)
+region_transactionAnnee = pd.read_csv(region_transactionAnnee_url)
+region_transactionTest= pd.read_csv(region_transactionTest_url)
+moyenne_region= pd.read_csv(moyenne_region_url)
 
 #dvf= pd.read_csv(r"resources/dvf.csv")
 
