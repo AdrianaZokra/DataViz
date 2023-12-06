@@ -27,6 +27,7 @@ df_in_sec_url="https://drive.google.com/uc?id=1-9hFcBH5rlW0MmO-kLRxPRwZmZ14ySn8"
 Geo_REG_url="https://drive.google.com/uc?id=1CIshBgHezNQthzReeKcMqIdv9pUaZRHN"
 Geo_DEP_url="https://drive.google.com/uc?id=1mvshQwYHPHSCikBHBFjNQyeRqRI11e3Q"
 
+
 #import des bases
 @streamlit.cache_data
 def load_data():
@@ -141,3 +142,7 @@ fig6 = px.choropleth(group_reg, geojson=data_dict["Geo_REG"].set_index(['code'])
 fig6.update_geos(fitbounds="locations", visible=False)
 
 fig6.update_layout( title=f"{titre_variable} par région", margin={"r":0,"t":0,"l":0,"b":0})
+
+
+def figGet():
+    return fig

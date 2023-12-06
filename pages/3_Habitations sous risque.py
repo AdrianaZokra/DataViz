@@ -1,82 +1,82 @@
 import streamlit as st
-import CAT_NAT
-import dvf_concat_trait
-from PIL import Image
 import pandas as pd
-import Methodes
 import folium
 from streamlit_folium import st_folium
-
 import style
+import geopandas as gpd
+from streamlit_folium import folium_static
+
 
 style.set_style()
-
-## Adding tabs and columns, and filters
-#tab1, tab2 = st.tabs(["Évènements sécheresse","Évènements inondation"])
-col1,col2 = st.columns(2)
-#data_NA = CAT_NAT.data_sec.dropna(subset=['Latitude'])
-#data_NA = data_NA.dropna(subset=['Longitude'])
-#data_NA_inond=CAT_NAT.data_inond.dropna(subset=['Latitude'])
-#data_NA_inond=data_NA_inond.dropna(subset=['Longitude'])
-
-
-
 
 #filtered_data = Methodes.filter_dataframe(data_NA, 1)
 #st.map(filtered_data, latitude='Latitude', longitude='Longitude')
 
-#filtered_data2 = Methodes.filter_dataframe(data_NA_inond, 2)
-#st.map(filtered_data2, latitude='Latitude', longitude='Longitude')
 
-# Create a Folium map centered around France
-#france_map = folium.Map(location=[46.6031, 1.7001], zoom_start=6)
-#st_data = st_folium(france_map, width=725)
+#Ressources drive
 
-#def tab_secheresse():
-#    st.header("Pour les évènements sécheresse")
-#    with st.container():
-#        with col1:
-#            # st.write(CAT_NAT.carte1)
-#            filtered_data = filter_dataframe(data_NA, 1)
-#            st.map(filtered_data, latitude='Latitude', longitude='Longitude')
-
-#def tab_inondation():
-#    st.header("Pour les évènements inondation")
-#    with st.container():
-#        with col1:
-#            # st.write(CAT_NAT.carte1)
-#           filtered_data2 = filter_dataframe(data_NA_inond, 2)
-#            st.map(filtered_data2, latitude='Latitude', longitude='Longitude')
-
-#choix=st.selectbox("Sélectionnez le type d'événement:",('Évènements sécheresse','Évènements inondation'),index=None,
-#   placeholder="Selectionner une analyse...")
-
-#if choix == 'Évènements sécheresse':
-#    tab_secheresse()
-
-#elif choix == 'Évènements inondation':
-#    tab_inondation()
+Geo_REG_url="https://drive.google.com/uc?id=1CIshBgHezNQthzReeKcMqIdv9pUaZRHN"
+Geo_DEP_url="https://drive.google.com/uc?id=1mvshQwYHPHSCikBHBFjNQyeRqRI11e3Q"
+nb_secheresse_url="https://drive.google.com/file/d/1NaMQ7rNmg5IN73uHAl74nK33dQpv0mgn"
+nb_inondation_url="https://drive.google.com/file/d/1RWd7EHFIqLfzcgqIpcYPOuzVQaWsEgFa"
+#import des bases
+@st.cache_data
+def load_data():
+    Geo_REG=gpd.read_file(Geo_REG_url)
+    Geo_DEP=gpd.read_file(Geo_DEP_url)
+    nb_secheresse = pd.read_csv(nb_secheresse_url,usecols=['Code_dep', 'Nb_sec'])
+    nb_inondation = pd.read_csv(nb_inondation_url,usecols=['Code_dep', 'Nb_in'])
+    return {"Geo_REG": Geo_REG, "Geo_DEP": Geo_DEP,"nb_secheresse": nb_secheresse, "nb_inondation": nb_inondation}
 
 
-def create_tabs(df1: pd.DataFrame, df2: pd.DataFrame):
-    with st.container():
-        with st.expander("Sélectionnez le type d'événement"):
-            tabs = st.tabs(["Évènements sécheresse", "Évènements inondation"])
-            if tabs == "Évènements sécheresse":
-                with tabs == "Évènements sécheresse":
-                    st.header("Pour les évènements sécheresse")
-                    with st.container():
-                        with col1():
-                            filtered_data = Methodes.filter_dataframe(df1, 1)
-                            st.map(filtered_data, latitude='Latitude', longitude='Longitude')
+data_dict = load_data()
 
-            elif tabs == "Évènements inondation":
-                st.header("Pour les évènements inondation")
-                with st.container():
-                    with col1():
-                        filtered_data2 = Methodes.filter_dataframe(df2, 2)
-                        st.map(filtered_data2, latitude='Latitude', longitude='Longitude')
+columns_secheresse = ['Code_dep', 'Nb_sec']
+columns_inondation = ['Code_dep', 'Nb_in']
 
-#create_tabs(data_NA,data_NA_inond)
-
-
+# Carte FOLIUM
+# Lecture du fichier
+Geo = gpd.GeoDataFrame(data_dict["Geo_DEP"])
+col3, col4 = st.columns((2))
+with col3:
+    st.markdown("<u>**Carte : Le cas de la sécheresse**</u>", unsafe_allow_html=True)
+    # Creation de la carte de la france avec folium
+    france_map = folium.Map(location=[46.6031, 1.7001], zoom_start=5)
+    sec = folium.Choropleth(
+        geo_data=Geo,
+        name="choropleth",
+        data=data_dict["nb_secheresse"],
+        columns=columns_secheresse,
+        key_on='feature.properties.Code_dep',
+        fill_color="YlOrRd",
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name="Départements les plus touchés par la sécheresse 1985-2022",
+        popup=''
+    ).add_to(france_map)
+    sec.geojson.add_child(
+        folium.features.GeoJsonTooltip(['Département'], labels=False)
+    )
+    # Afficher la carte dans Streamlit
+    folium_static(france_map)
+with col4:
+    st.markdown("<u>**Carte : Le cas de l'inondation**</u>", unsafe_allow_html=True)
+    # Creation de la carte de la france avec folium
+    france_map = folium.Map(location=[46.6031, 1.7001], zoom_start=5)
+    inondation = folium.Choropleth(
+        geo_data=Geo,
+        name="choropleth",
+        data=data_dict["nb_inondation"],
+        columns=columns_inondation,
+        key_on='feature.properties.Code_dep',
+        fill_color="Blues",
+        fill_opacity=0.7,
+        line_opacity=0.2,
+        legend_name="Départements les plus touchés par les inondations 1985-2022",
+        popup=''
+    ).add_to(france_map)
+    inondation.geojson.add_child(
+        folium.features.GeoJsonTooltip(['Département'], labels=False)
+    )
+    # Afficher la carte dans Streamlit
+    folium_static(france_map)

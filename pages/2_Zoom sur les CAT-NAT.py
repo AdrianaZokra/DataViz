@@ -16,7 +16,7 @@ tab1, tab2 , tab3= st.tabs(["Général","Sécheresse","Inondation"])
 
 with tab1:
     with st.container():
-        st.write(CAT_NAT.fig)
+        st.write(CAT_NAT.figGet())
         with st.expander("Voir l'explication"):
            st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
     with st.container():
@@ -27,10 +27,12 @@ with tab1:
         st.write(CAT_NAT.fig3)
         with st.expander("Voir l'explication"):
            st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
-#    with st.container():
-#        st.write(CAT_NAT.fig4)
-#        with st.expander("Voir l'explication"):
-#            st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
+    with st.container():
+        st.write(CAT_NAT.fig4)
+        with st.expander("Voir l'explication"):
+           st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
+
+
 with tab2:
     with st.container():
         st.write(CAT_NAT.fig5)
