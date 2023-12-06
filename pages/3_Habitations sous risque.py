@@ -7,6 +7,10 @@ import Methodes
 import folium
 from streamlit_folium import st_folium
 
+import style
+
+style.set_style()
+
 ## Adding tabs and columns, and filters
 #tab1, tab2 = st.tabs(["Évènements sécheresse","Évènements inondation"])
 col1,col2 = st.columns(2)

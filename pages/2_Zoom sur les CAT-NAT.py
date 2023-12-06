@@ -1,33 +1,38 @@
 import streamlit as st
-import dvf_concat_trait
-# # Ajout d'une sidebar
-st.sidebar.header('Filtres')
+import CAT_NAT
+import style
+import os
+from PIL import Image
+import plotly_express as px
+
+style.set_style()
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+resources_dir = os.path.join(script_dir, "resources")
+legende_path = os.path.join(resources_dir, "legende.jpg")
 
 ## Adding tabs
-tab1, tab2 = st.tabs(["Sécheresse","Inondation"])
+tab1, tab2 , tab3= st.tabs(["Général","Sécheresse","Inondation"])
 
-def plot_section_1():
+with tab1:
     with st.container():
-        with tab1:
-            st.header("Graphe")
-            st.write(dvf_concat_trait.fig)
-            with st.expander("Voir l'explication"):
-                st.write("Le graphe ci-dessus représente ... *italique*")
-        with tab2:
-            st.header("Dataframe")
-            st.write(dvf_concat_trait.departement_transaction)
-
-
-def plot_section_2():
-    st.write(dvf_concat_trait.fig2)
-
-option = st.sidebar.selectbox('Quelle analyse souhaiteriez-vous voir?',('Département avec le plus de transaction','Prix au mètre carré'),index=None,
-   placeholder="Selectionner une analyse...")
-
-if option == 'Département avec le plus de transaction':
-    plot_section_1()
-
-elif option == 'Prix au mètre carré':
-    plot_section_2()
-
-
+        st.write(CAT_NAT.fig)
+        with st.expander("Voir l'explication"):
+           st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
+    with st.container():
+        st.write(CAT_NAT.fig2)
+        with st.expander("Voir l'explication"):
+           st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
+    with st.container():
+        st.write(CAT_NAT.fig3)
+        with st.expander("Voir l'explication"):
+           st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
+#    with st.container():
+#        st.write(CAT_NAT.fig4)
+#        with st.expander("Voir l'explication"):
+#            st.write("Sur les 4 années, Nord est le département ayant enregistrés le plus de transaction, tandis que Lozère est celui ayant enregistré le moins.")
+with tab2:
+    with st.container():
+        st.write(CAT_NAT.fig5)
+    with st.container():
+        st.write(CAT_NAT.fig6)

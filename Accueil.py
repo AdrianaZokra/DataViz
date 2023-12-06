@@ -1,10 +1,13 @@
-# -*- coding: utf-8 -*-
-
 import streamlit as st
-import dvf_concat_trait
 from PIL import Image
 import datetime
 import os
+import style
+import toml
+
+
+style.set_style()
+
 
 # Get the current directory of the Python script
 script_dir = os.path.dirname(os.path.abspath(__file__))

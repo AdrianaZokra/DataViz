@@ -3,6 +3,9 @@ import dvf_concat_trait
 import plotly as plt
 import Methodes
 import plotly_express as px
+import style
+
+style.set_style()
 
 ## Adding tabs
 tab1, tab2, tab3 = st.tabs(["Département","Région","Valeurs foncières et Prix m2"])

@@ -1,51 +1,132 @@
 import pandas as pd
 import plotly_express as px
 import geopandas as gpd
+import plotly.graph_objects as go
 
-
+#Les couleurs
 color = 'lightblue'
-color_map = "Viridis"
-palette = "Viridis"
+color_map_inondation = "ice"
+color_map_secheresse= "Peach"
+color_discrete= "indianred"
+palette="Viridis"
+color_type_local=["coral","cornflowerblue"]
+palette_secheresse="YlOrRd"
+palette_innondation="Blues"
 
-#data_sec = pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/data_sec.csv")
-#data_inond=pd.read_csv(r"C:/documents A5_2023-2024/DataVizChallenge/Bases_output/data_inond.csv")
-Geo_DEP = gpd.read_file('C:/documents A5_2023-2024/DataVizChallenge/Resources/departements.geojson')
-Geo_REG = gpd.read_file('C:/documents A5_2023-2024/DataVizChallenge/Resources/regions.geojson')
+#Ressources drive
+dataf_2022_url="https://drive.google.com/file/d/1RjGM0ENl8WhKWsq6utgOsr2UFL04W1Uh"
+data_sec_url="https://drive.google.com/file/d/1--TcMwX_pnAh_-Lqby65sQRh6PtpSOhz"
+data_inond_url="https://drive.google.com/file/d/1-0WfkhLqpmtjTQj7k7wPgnhckKa93suf"
+data_mouv_url="https://drive.google.com/file/d/1-18Yod3G-fOpdWd33KVcUN9Te-gyDm_2"
+data_url="https://drive.google.com/file/d/15dmJK9ocvPvKvhIkyDWaygvfHVZd7tsa"
+count_url="https://drive.google.com/file/d/1-2Lz8CjPz3133Qb28uJNJZIkLLdaDnRQ"
+df_in_sec_url="https://drive.google.com/file/d/1-9hFcBH5rlW0MmO-kLRxPRwZmZ14ySn8"
+Geo_REG_url="https://drive.google.com/file/d/1CIshBgHezNQthzReeKcMqIdv9pUaZRHN"
+Geo_DEP_url="https://drive.google.com/file/d/1mvshQwYHPHSCikBHBFjNQyeRqRI11e3Q"
 
-#database = data_sec
-variable = "nb_jours"
-titre_variable = "nombre de secheresse"
+#import des bases
+dataf_2022 = pd.read_csv('https://drive.google.com/uc?id='+dataf_2022_url.split('/')[-1])
+data_sec = pd.read_csv('https://drive.google.com/uc?id='+data_sec_url.split('/')[-1], low_memory=False)
+data_inond = pd.read_csv('https://drive.google.com/uc?id='+data_inond_url.split('/')[-1])
+data_mouv= pd.read_csv('https://drive.google.com/uc?id='+data_mouv_url.split('/')[-1])
+data=pd.read_csv('https://drive.google.com/uc?id='+data_url.split('/')[-1])
+count=pd.read_csv('https://drive.google.com/uc?id='+count_url.split('/')[-1])
+df_in_sec=pd.read_csv('https://drive.google.com/uc?id='+df_in_sec_url.split('/')[-1])
+Geo_REG=pd.read_csv('https://drive.google.com/uc?id='+Geo_REG_url.split('/')[-1])
+Geo_DEP=pd.read_csv('https://drive.google.com/uc?id='+Geo_DEP_url.split('/')[-1])
+
+#fig 1 dans CAT NAT
+fig = px.line(dataf_2022, x='Année', y='nombre de sinistres déclarés', color='type de catastrophe naturelle',
+              line_group='type de catastrophe naturelle',
+              title="Nombre de sinistres déclarés par type de catastrophe au cours du temps")
+fig.update_traces(mode="markers+lines", hovertemplate=None)
 
 
-#calcul de la moyenne de durée des sinitres par département
-#group_dep = database.groupby('Département')[variable].count()
-#group_dep = pd.DataFrame(data=group_dep)
-#group_dep = group_dep.rename(columns={"nb_jours": titre_variable})
-#group_dep = group_dep.reset_index()
+#fig 2 dans CAT NAT
+# Fonction pour calculer la durée moyenne
+def calculate_average_duration(data_frame, start_year, end_year, event_type):
+    # Filtrer les données pour le type d'événement spécifié et les années données
+    filtered_data = data_frame[(data_frame["Année"] >= start_year) & (data_frame["Année"] <= end_year)]
 
-#carte1 = px.choropleth(group_dep, geojson=Geo_DEP.set_index(['code']), locations='Département', color=titre_variable,
-#                    color_continuous_scale=color_map,
-#                    projection="mercator"
-#                   )
-#carte1.update_geos(fitbounds="locations", visible=False)
-#carte1.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+    # Calculer la durée moyenne
+    average_duration = filtered_data['nb_jours'].sum() / filtered_data['nb_jours'].count()
 
-#Par région
-#database = data_sec
-#variable = "nb_jours"
-#titre_variable = "Nombre de sécheresse"
+    print(f"Durée moyenne de {event_type} entre {start_year} et {end_year}: {average_duration:.2f} jours")
+
+    return average_duration
+
+# Calcul des durées moyennes pour chaque événement entre 2001-2010 et 2010-2022
+durée_moyenne_inondation_01_10 = calculate_average_duration(data_inond, 2001, 2010, "Inondation")
+durée_moyenne_sécheresse_01_10 = calculate_average_duration(data_sec, 2001, 2010, "Sécheresse")
+durée_moyenne_mouv_01_10 = calculate_average_duration(data_mouv, 2001, 2010, "Mouvement de terrain")
+
+durée_moyenne_inondation_10_22 = calculate_average_duration(data_inond, 2010, 2022, "Inondation")
+durée_moyenne_sécheresse_10_22 = calculate_average_duration(data_sec, 2010, 2022, "Sécheresse")
+durée_moyenne_mouv_10_22 = calculate_average_duration(data_mouv, 2010, 2022, "Mouvement de terrain")
+
+# Création d'un histograme
+event_types = ['Inondation', 'Sécheresse', 'Mouvement de terrain']
+average_durations_01_10 = [durée_moyenne_inondation_01_10, durée_moyenne_sécheresse_01_10,  durée_moyenne_mouv_01_10]
+average_durations_10_22 = [durée_moyenne_inondation_10_22, durée_moyenne_sécheresse_10_22, durée_moyenne_mouv_10_22]
+
+fig2 = go.Figure()
+
+# Ajout des barres pour la période 2001-2010
+fig2.add_trace(go.Bar(x=event_types, y=average_durations_01_10, name='2001-2010', marker_color=color_type_local[0]))
+
+# Ajout des barres pour la période 2010-2022r
+fig2.add_trace(go.Bar(x=event_types, y=average_durations_10_22, name='2010-2022', marker_color=color_type_local[1]))
+
+fig2.update_layout(barmode='group', title='Durée moyenne des événements météorologiques entre 2001-2010 et 2010-2022',
+                  xaxis_title='Types d\'événements',
+                  yaxis_title='Durée moyenne (jours)')
 
 
-#group_reg = database.groupby( ['class','Région'])[variable].count()
-#group_reg = pd.DataFrame(data=group_reg)
-#group_reg = group_reg.rename(columns={"nb_jours": titre_variable})
-#group_reg = group_reg.reset_index()
+#fig 3 sur CAT NAT
+fig3 = px.bar(count, x='Annee', y=['nb_innondation', 'nb_secheresse'],
+             labels={'value': 'Nombre d\'événements', 'variable': 'Type'},
+             title='Evolution',
+             barmode='group')
 
-#carte2 = px.choropleth(group_reg, geojson=Geo_REG.set_index(['code']), locations='class', color=titre_variable,
-#                    color_continuous_scale=color_map,
-#                    projection="mercator",hover_data={'class': False, titre_variable: True, 'Région': True}
-#                   )
-#carte2.update_geos(fitbounds="locations", visible=False)
-#carte2.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+#fig 4 sur CAT NAT
+fig4 = px.bar(df_in_sec, x='Région', y=['nb_innondation', 'nb_secheresse'], hover_name="Annee",
+             animation_frame='Annee', barmode='group', text_auto=True)
+fig4.update_layout(
+    title="Nombre d'innondations et de sécheresses par région au fil du temps",
+    yaxis=dict(range=[df_in_sec['nb_innondation'].min(), df_in_sec['nb_innondation'].max()])
+)
 
+
+#fig 5 sur CAT NAT
+df_counts = data_sec.groupby("Année")["cod_nat_catnat"].count().reset_index(name="Nombre")
+fig5 = px.bar(df_counts, x="Année", y="Nombre",
+             title='Nombre d\'évenement de sécheresse par année', color_discrete_sequence=[color])
+
+fig5.update_layout(
+    xaxis_title="Année",
+    yaxis_title="Nombre",  title_x=0.5
+)
+
+# fig 6 sur CAT NAT
+
+variable = "cod_nat_catnat"
+titre_variable = "Nombre de sécheresse"
+
+group_reg = data_sec.groupby(['class', "Région" ])[variable].count()
+group_reg = pd.DataFrame(data=group_reg)
+group_reg = group_reg.rename(columns={"cod_nat_catnat": titre_variable})
+group_reg = group_reg.reset_index()
+
+variable = "cod_nat_catnat"
+titre_variable = "Nombre de sécheresse"
+
+fig6 = px.choropleth(group_reg, geojson=Geo_REG.set_index(['code']), locations='class', color=titre_variable,
+                    color_continuous_scale=palette_secheresse,
+                    projection="mercator",
+                    hover_data={'class': False, titre_variable: True, 'Région': True}
+                   )
+
+fig6.update_geos(fitbounds="locations", visible=False)
+
+fig6.update_layout( title=f"{titre_variable} par région", margin={"r":0,"t":0,"l":0,"b":0})
 
